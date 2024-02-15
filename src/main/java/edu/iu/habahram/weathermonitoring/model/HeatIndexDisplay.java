@@ -3,14 +3,14 @@ package edu.iu.habahram.weathermonitoring.model;
 import org.springframework.stereotype.Component;
 
 @Component
-public class StatisticsDisplay implements Observer, DisplayElement {
+public class HeatIndexDisplay implements DisplayElement, Observer {
     private float temperature;
     private float humidity;
     private float pressure;
 
     private Subject weatherData;
 
-    public StatisticsDisplay(Subject weatherData) {
+    public HeatIndexDisplay(Subject weatherData) {
         this.weatherData = weatherData;
     }
 
@@ -24,10 +24,7 @@ public class StatisticsDisplay implements Observer, DisplayElement {
                 "display:flex;flex-wrap:wrap;justify-content:center;align-content:center;" +
                 "\">");
         html += "<section>";
-        html += String.format("<h1>Weather Statistics</h1><br />");
-        html += String.format("<label>Average Temperature: %s</label><br />", temperature);
-        html += String.format("<label>Minimum Temperature: %s</label><br />", temperature - 15);
-        html += String.format("<label>Maximum Temperature: %s</label>", temperature + 15);
+        html += String.format("<label>Heat Index: %s</label><br />", computeHeatIndex(temperature, humidity));
         html += "</section>";
         html += "</div>";
         html += String.format("<a href=/displays/%s/subscribe>Subscribe</a><br/>", id());
@@ -37,12 +34,12 @@ public class StatisticsDisplay implements Observer, DisplayElement {
 
     @Override
     public String name() {
-        return "Statistics Display";
+        return "Heat Index Display";
     }
 
     @Override
     public String id() {
-        return "statistics";
+        return "heat-index";
     }
 
     @Override
@@ -58,5 +55,17 @@ public class StatisticsDisplay implements Observer, DisplayElement {
 
     public void unsubscribe() {
         weatherData.removeObserver(this);
+    }
+
+    private float computeHeatIndex(float t, float rh) {
+        float index = (float)((16.923 + (0.185212 * t) + (5.37941 * rh) - (0.100254 * t * rh) +
+                (0.00941695 * (t * t)) + (0.00728898 * (rh * rh)) +
+                (0.000345372 * (t * t * rh)) - (0.000814971 * (t * rh * rh)) +
+                (0.0000102102 * (t * t * rh * rh)) - (0.000038646 * (t * t * t)) + (0.0000291583 *
+                (rh * rh * rh)) + (0.00000142721 * (t * t * t * rh)) +
+                (0.000000197483 * (t * rh * rh * rh)) - (0.0000000218429 * (t * t * t * rh * rh)) +
+                0.000000000843296 * (t * t * rh * rh * rh)) -
+                (0.0000000000481975 * (t * t * t * rh * rh * rh)));
+        return index;
     }
 }

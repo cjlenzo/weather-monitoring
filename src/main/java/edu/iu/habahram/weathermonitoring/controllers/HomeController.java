@@ -18,8 +18,10 @@ public class HomeController {
 
     @GetMapping
     public ResponseEntity index() {
-        String html =
-                String.format("<h1>Subscribed screens(%s):</h1>", weatherData.getObservers().size());
+        String html = String.format("<h1>Subscribed screens(%s):</h1>", weatherData.getObservers().size());
+        html += String.format("<a href=/displays>To Available Screens</a><br/>");
+
+
         html += "<ul>";
         for(Observer observer : weatherData.getObservers()) {
             html += "<li>";

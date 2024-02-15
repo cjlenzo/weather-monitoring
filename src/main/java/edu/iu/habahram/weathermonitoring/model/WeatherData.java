@@ -26,9 +26,9 @@ public class WeatherData implements Subject{
     }
 
     Runnable sensorsChanged = () -> {
-        setMeasurements((float) Math.random(),
-                (float) Math.random(),
-                (float) Math.random());
+        setMeasurements((float) Math.random() * 100,
+                (float) Math.random() * 100,
+                (float) Math.random() * 100);
     };
 
     @Override

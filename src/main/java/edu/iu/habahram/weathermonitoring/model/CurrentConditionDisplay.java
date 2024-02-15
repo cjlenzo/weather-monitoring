@@ -3,8 +3,7 @@ package edu.iu.habahram.weathermonitoring.model;
 import org.springframework.stereotype.Component;
 
 @Component
-public class CurrentConditionDisplay
-        implements Observer, DisplayElement{
+public class CurrentConditionDisplay implements Observer, DisplayElement{
     private float temperature;
     private float humidity;
     private float pressure;
@@ -30,6 +29,8 @@ public class CurrentConditionDisplay
         html += String.format("<label>Pressure: %s</label>", pressure);
         html += "</section>";
         html += "</div>";
+        html += String.format("<a href=/displays/%s/subscribe>Subscribe</a><br/>", id());
+        html += String.format("<a href=/displays/%s/unsubscribe>Unsubscribe</a><br/>", id());
         return html;
     }
 
